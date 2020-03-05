@@ -8,7 +8,7 @@ You can use make to compile the program
 then `./SORT` to run the program
 
 ### Design Explanation
-The program starts off by creating the sharedd memory required and the semaphore.
+The program starts off by creating the shared memory required and the semaphore.
 
 The program program then proceeds to `fork()` 5 times, with each child calling `sort(...)`.
 The child processes get passed the shared memory as well as which part of the array they are
