@@ -42,3 +42,6 @@ The process is continued untill the array is sorted.
 	- each process will keep running while the array is not yet sorted
 - The program is designed to wait until the array is sorted before exiting
 	- the parent process waits for the children to finish with `wait(...)`
+
+### DEBUG MODE
+To enable printinf of extra information the `DEBUG_MODE` can be set to 1

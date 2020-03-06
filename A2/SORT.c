@@ -19,6 +19,9 @@ struct numbers{
   int arr[5];
 };
 
+// DEBUG MODE VARIABLE
+int DEBUG_MODE = 0;
+
 // function declarations
 static int set_semvalue(void);
 static void del_semvalue(void);
@@ -83,23 +86,36 @@ int main() {
     del_semvalue();
   }
 
+  // detach shared memory
+	if (shmdt(mem_p) == -1) {
+		fprintf(stderr, "shmdt failed\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (shmctl(shmid, IPC_RMID, 0) == -1) {
+		fprintf(stderr, "shmctl(IPC_RMID) failed\n");
+		exit(EXIT_FAILURE);
+	}
+
   exit(EXIT_SUCCESS);
 }
 
 // sort a subarray of two elements in descending order
 static void sort(int low, int hi, struct numbers* numbers_shm){
-  printf("\nstarting to sort. low: %d, hi: %d \n", low, hi);
+  if (DEBUG_MODE == 1)
+    printf("\nstarting to sort. low: %d, hi: %d \n", low, hi);
 
   while(!sorted(numbers_shm)) {
     if (!semaphore_p()) exit(EXIT_FAILURE); // get lock or block
 
-    // swap
+   // swap
     if (numbers_shm->arr[low] < numbers_shm->arr[hi]) {
       int temp = numbers_shm->arr[low];
       numbers_shm->arr[low] = numbers_shm->arr[hi];
       numbers_shm->arr[hi] = temp;
 
-      printf("\nswapped %d, %d\n", numbers_shm->arr[low], numbers_shm->arr[hi]);
+      if (DEBUG_MODE == 1)
+        printf("\nswapped %d, %d\n", numbers_shm->arr[low], numbers_shm->arr[hi]);
     }
 
     if (!semaphore_v()) exit(EXIT_FAILURE); // release lock
@@ -128,6 +144,7 @@ static int set_semvalue(void){
 static void del_semvalue(void){
   union semun sem_union;
   if (semctl(sem_id, 0, IPC_RMID, sem_union) == -1)
+
   fprintf(stderr, "Failed to delete semaphore\n");
 }
 
