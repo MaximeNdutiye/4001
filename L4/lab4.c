@@ -4,7 +4,6 @@
 #include <sys/sem.h>
 #include  <sys/types.h>
 
-#include "semun.h"
 
 static int set_semvalue(void);
 static void del_semvalue(void);
